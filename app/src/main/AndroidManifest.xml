@@ -9,8 +9,10 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />&lt;!&ndash; Required if your app targets Android 10 (API level 29) or higher &ndash;&gt; -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /><!-- Required if your app targets Android 10 (API level 29) or higher -->
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +25,8 @@
         <service
             android:name=".CoronaLocationNearAlertService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true">
+        </service>
         <!--
         <service
             android:name=".GpsTracker"
@@ -48,8 +51,9 @@
         <activity android:name=".CoronaMapAllActivity" />
         <activity android:name=".CoronaMapActivity" />
         <activity android:name=".CoronoLocationActivity" />
-        <activity android:name=".SecondActivity" />
-        <activity android:name=".MainActivity">
+        <!--        <activity android:name=".SecondActivity" />-->
+        <!--        <activity android:name=".MainActivity">-->
+        <activity android:name=".SecondActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -64,9 +68,9 @@
             android:resource="@drawable/marker_red" />
         <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more. -->
-        <!-- meta-data
+        <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" -->
+            android:resource="@color/colorAccent" />
 
 
         <service android:name=".MyFirebaseMessagingService">

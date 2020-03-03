@@ -3,6 +3,7 @@ package com.example.coronaMapProject;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,7 +55,9 @@ public class CoronaLocationNearAlertService extends Service {
 
     PendingIntent pendingIntent;
     NotificationCompat.Builder mBuilder;
-    NotificationManager notificationManager;
+//    NotificationManager notificationManager;
+    NotificationManagerCompat notificationManager;
+    String GROUP_KEY_coronaMapProject = "com.android.example.WORK_EMAIL";
 
 
     class MyBinder extends Binder {
@@ -124,17 +128,31 @@ public class CoronaLocationNearAlertService extends Service {
                 new Intent(getApplicationContext(), CoronaMapAllActivity.class),
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
+        // Android Oreo version and above versions need include NotificationChannel.
+        String channelId = "channel";
+        String channelName = "Channel_name";
+        int importance = NotificationManager.IMPORTANCE_LOW;
+
+//        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = NotificationManagerCompat.from(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(channelId, channelName, importance);
+            notificationManager.createNotificationChannel(mChannel);
+        }
+
         mBuilder =
-                new NotificationCompat.Builder(CoronaLocationNearAlertService.this)
+                new NotificationCompat.Builder(CoronaLocationNearAlertService.this, channelId)
                         .setSmallIcon(R.drawable.marker_red)
                         .setContentTitle("코로나 확진자 장소에 접근하였습니다.")
                         .setContentText("확인하기")
-                        .setDefaults(Notification.DEFAULT_VIBRATE)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setAutoCancel(true)
-                        .setContentIntent(pendingIntent);
-        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
+                        .setDefaults(Notification.DEFAULT_VIBRATE)
+                        .setContentIntent(pendingIntent)
+                        .setGroup(GROUP_KEY_coronaMapProject);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Log.d("===", "Notification Enabled? : " + notificationManager.areNotificationsEnabled());
+        }
+//        Log.d("===", "Notification hidden? : " + notificationManager.areNotificationsPaused());
 //
 //        String[] permissions = {
 //                Manifest.permission.ACCESS_FINE_LOCATION,
@@ -291,7 +309,7 @@ public class CoronaLocationNearAlertService extends Service {
                         }
                         state = "ENTER";
 //                            Log.d("---d enter: ", list_loc_enter.get(list_loc_enter.size() - 1).getPatientName() + " " + list_loc_enter.get(list_loc_enter.size() - 1).getName());
-                        notificationManager.notify(0, mBuilder.build());
+                        notificationManager.notify(1, mBuilder.build());
                     } else if (curr_location.distanceTo(locations[i]) / 1000 < 1 && state.equals("ENTER")) {
 //                            Log.d("---d ", "do nothing");
                     } else if (curr_location.distanceTo(locations[i]) / 1000 > 1 && state.equals("ENTER")) {
@@ -307,6 +325,7 @@ public class CoronaLocationNearAlertService extends Service {
                     }
                 }
             }
+
         }
 
         @Override

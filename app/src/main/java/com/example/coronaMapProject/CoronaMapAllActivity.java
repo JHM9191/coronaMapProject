@@ -185,6 +185,10 @@ public class CoronaMapAllActivity extends AppCompatActivity implements OnMapRead
         );
         // 현재 위치 가져와서 맵 화면 처음 실행할 때 현재 위치 보여주기
         curr_location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (curr_location==null){
+            curr_location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        }
+        Log.d("===", "curr_location.getLatitude() : " + curr_location.getLatitude() + "");
         gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(curr_location.getLatitude(), curr_location.getLongitude()), 8));
 
     }
@@ -306,7 +310,7 @@ public class CoronaMapAllActivity extends AppCompatActivity implements OnMapRead
                 Log.d("---d ", mapList.get(i).getName() + ": " + curr_loc.distanceTo(locations[i]) / 1000 + "");
                 if (curr_loc.distanceTo(locations[i]) / 1000 < 1 && !state.equals("ENTER")) {
                     list_loc_enter.add(mapList.get(i));
-                    Log.d("---d list_loc_enter.size(): ", list_loc_enter.size() + "");
+                    Log.d("list_loc_enter.size():", list_loc_enter.size() + "");
                     if (Build.VERSION.SDK_INT >= 26) {
                         Toast.makeText(CoronaMapAllActivity.this, "위험위험!", Toast.LENGTH_SHORT).show();
                         vibrator.vibrate(VibrationEffect.createOneShot(1000, 255));

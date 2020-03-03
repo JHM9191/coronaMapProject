@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,7 +59,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void getData() {
-        String url = "http://13.209.177.31/webview/corona.jsp";
+        String url = "http://192.168.43.2/webview/corona.jsp";
         ItemAsync itemAsync = new ItemAsync(url);
         itemAsync.execute();
     }
@@ -200,7 +201,9 @@ public class SecondActivity extends AppCompatActivity {
             nat.setText("국적: " + alist.get(position).getNationality());
 
             progressBar.setMax(200);
-            progressBar.setProgress(alist.get(position).getMeet(), true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                progressBar.setProgress(alist.get(position).getMeet(), true);
+            }
             meet.setText("접촉자수: " + alist.get(position).getMeet() + " 명");
 
             clickno = alist.get(position).getId();
