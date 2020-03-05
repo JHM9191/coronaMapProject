@@ -8,7 +8,7 @@
 
 > 국내 코로나19 현황
 >
-> > ![국내_코로나19_현황](/Users/johyunmin/AndroidStudioProjects/coronaMapProject/img/corona.jpg)
+> > ![국내_코로나19_현황](.img/corona.jpg)
 > >
 > > 출처: [연합뉴스](https://www.yna.co.kr/view/GYH20200304001000044)
 >
