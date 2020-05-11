@@ -43,6 +43,7 @@ public class SecondActivity extends AppCompatActivity {
     ItemAdapter itemAdapter;
     ProgressDialog progressDialog;
     ArrayList<CoronaLocation> maplist;
+    public static String serverIP = "192.168.43.2:8080";
 
 
     @Override
@@ -59,7 +60,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void getData() {
-        String url = "http://192.168.43.2/webview/corona.jsp";
+        String url = "http://" + serverIP + "/webview/corona.jsp";
         ItemAsync itemAsync = new ItemAsync(url);
         itemAsync.execute();
     }
@@ -84,6 +85,7 @@ public class SecondActivity extends AppCompatActivity {
         protected String doInBackground(Void... voids) {
             String result = null;
             result = HttpHandler.getString(url);
+            Log.d("---", "result : " + result);
             return result;
         }
 
@@ -212,7 +214,7 @@ public class SecondActivity extends AppCompatActivity {
             String img = alist.get(position).getImg();
 
             // 서버에 이미지 파일 요청하기
-            img = "http://13.209.177.31/webview/img/" + img;
+            img = "http://" + serverIP + "/webview/img/" + img;
 
             final String finalImg = img;
             Thread t = new Thread(new Runnable() {
